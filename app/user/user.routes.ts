@@ -8,7 +8,7 @@ const router = Router();
 
 router.post("/login", catchError, login);
 router.post("/signup", validateUserSignup, catchError, signup); 
-router.post("/logout", catchError, logout);
+router.post("/logout",protectRouteMiddleware , catchError, logout);
 router.get("/", protectRouteMiddleware, catchError, getUser);
 
 export default router;

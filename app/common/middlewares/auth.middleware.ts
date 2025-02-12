@@ -1,11 +1,6 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
-
 import { Request, Response, NextFunction } from "express";
 import prisma from "../services/database.service";
-
-interface DecodedToken extends JwtPayload {
-  userId: string;
-}
+import { verifyAccessToken, refreshAccessToken } from "../services/token.service";
 
 declare global {
   namespace Express {
@@ -18,29 +13,41 @@ declare global {
 }
 
 /**
- * A middleware function that verifies if the user is authenticated.
- * If the user is authenticated, the user details are stored in the request object.
- * If the user is not authenticated, the middleware sends a 401 status code with an appropriate error message.
+ * Protects a route by verifying the access token and refresh token in the request's cookies.
+ * If the access token is invalid, it tries to refresh it using the refresh token.
+ * If the access token is valid, it retrieves the user with the corresponding id and stores it in the request object.
+ * If any of these steps fail, it sends a 401 status code with an appropriate error message.
  * @param req - The request object
  * @param res - The response object
  * @param next - The next function in the middleware stack
  */
 const protectRoute = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.jwt;
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
 
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized - No token provided" });
+    if (!accessToken && !refreshToken) {
+      return res.status(401).json({ error: "Unauthorized - No tokens provided" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as DecodedToken;
+    // Try to verify access token first
+    let userId = accessToken ? verifyAccessToken(accessToken) : null;
 
-    if (!decoded) {
-      return res.status(401).json({ error: "Unauthorized - Invalid Token" });
+    // If access token is invalid but refresh token exists, try to refresh
+    if (!userId && refreshToken) {
+      const newAccessToken = await refreshAccessToken(refreshToken, res);
+      if (!newAccessToken) {
+        return res.status(401).json({ error: "Unauthorized - Invalid tokens" });
+      }
+      userId = verifyAccessToken(newAccessToken);
+    }
+
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - Invalid tokens" });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: userId },
       select: { id: true, email: true, fullName: true, profilePic: true },
     });
 
@@ -49,7 +56,6 @@ const protectRoute = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     req.user = user;
-
     next();
   } catch (error: any) {
     console.log("Error in protectRoute middleware", error.message);

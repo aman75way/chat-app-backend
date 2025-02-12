@@ -16,7 +16,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {
-  const message = await logoutService(res);
+  const message = await logoutService(req.user.id, res);
   res.status(200).json(message);
 });
 

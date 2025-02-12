@@ -341,5 +341,4 @@ This project is licensed under the ISC License.
 
 ## NOTE
 
-1. For further improvements Access and Refresh Tokens can be implemented
-2. Group Chat Features can be implemented
+1. Group Chat Features can be implemented
