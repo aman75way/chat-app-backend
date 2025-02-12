@@ -1,0 +1,58 @@
+[
+  {
+    "fullName": "John Doe",
+    "email": "johndoe@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "male"
+  },
+  {
+    "fullName": "Jane Smith",
+    "email": "janesmith@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "female"
+  },
+  {
+    "fullName": "Bob Doe",
+    "email": "bobdoe@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "male"
+  },
+  {
+    "fullName": "Wayne Smith",
+    "email": "waynesmith@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "male"
+  },
+  {
+    "fullName": "Lara Croft",
+    "email": "laracroft@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "female"
+  },
+  {
+    "fullName": "Morgan Freeman",
+    "email": "morganfreeman@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "male"
+  },
+  {
+    "fullName": "Nicole Kidman",
+    "email": "nicolekidman@example.com",
+    "role": "USER",
+    "password": "SecurePass123!",
+    "confirmPassword": "SecurePass123!",
+    "gender": "female"
+  }
+]
